@@ -5,7 +5,12 @@
             "label": "nvcc",
             "type": "shell",
             "command": "nvcc",
-            "args": ["-g","-G","-o","${fileDirname}/test","${file}"]
+            "args": [
+                "-g","-G",
+                "-I", "${fileDirname}/utils/",
+                "-o","${fileDirname}/output/main",
+                "${file}"
+            ]
         }
     ]
 }

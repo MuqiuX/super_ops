@@ -9,7 +9,7 @@
             "name": "CUDA C++: Launch",
             "type": "cuda-gdb",
             "request": "launch",
-            "program": "${fileDirname}/test",
+            "program": "${fileDirname}/output/main",
             "preLaunchTask": "nvcc"
         },
         {
