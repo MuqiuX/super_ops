@@ -154,3 +154,9 @@ def median_dim(inp, dim=-1, keepdim=False):
     median_out = namedtuple("median", ["values", "indices"])
     out = median_out(values=values, indices=indices)
     return out
+
+@pytest.mark.median
+def test_median_dim():
+    x = torch.randn((32, 128), dtype=torch.float32, device='cuda')
+    print(x)
+    print(median_dim(x))
