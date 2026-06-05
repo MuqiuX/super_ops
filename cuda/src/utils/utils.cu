@@ -1,4 +1,4 @@
-#include "utils.h"
+#include "utils/utils.h"
 #include <stdio.h>
 
 void checkResult(float * hostRef,float * gpuRef,const int N)

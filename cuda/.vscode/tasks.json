@@ -2,15 +2,28 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "nvcc",
+            "label": "cmake configure",
             "type": "shell",
-            "command": "nvcc",
+            "command": "cmake",
             "args": [
-                "-g","-G",
-                "-I", "${fileDirname}/utils/",
-                "-o","${fileDirname}/output/main",
-                "${file}"
+                "-DCMAKE_BUILD_TYPE=Debug",
+                "-B", "${workspaceFolder}/build",
+                "-S", "${workspaceFolder}"
             ]
+        },
+        {
+            "label": "cmake build",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "--build", "${workspaceFolder}/build",
+                "--config", "Debug"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "dependsOn": ["cmake configure"]
         }
     ]
 }
