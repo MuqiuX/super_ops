@@ -1,22 +1,14 @@
 #include "utils/utils.h"
 #include <cuda_runtime.h>
 #include <stdio.h>
-
-__global__ void add(float *input, float *other, float *out) {
-  int i = threadIdx.x;
-  out[i] = input[i] + other[i];
-}
-
-void _add(float *input, float *other, float *out, const int size) {
-  for (size_t i = 0; i < size; i++) {
-    out[i] = input[i] + other[i];
-  }
-}
+#include "ops/add.h"
 
 int main() {
   cudaSetDevice(0);
-  const int N = 32;
-  int n_bytes = sizeof(float *) * N;
+  
+  int nx = 4096, ny = 4066;
+  int N = nx * ny;
+  int n_bytes = sizeof(float) * (nx * ny);
 
   float *h_a;
   float *h_b;
@@ -41,18 +33,18 @@ int main() {
   CHECK(cudaMemcpy(d_a, h_a, n_bytes, cudaMemcpyHostToDevice));
   CHECK(cudaMemcpy(d_b, h_b, n_bytes, cudaMemcpyHostToDevice));
 
-  dim3 block(N);
-  dim3 grid(N / block.x);
+  dim3 block(8, 32);
+  dim3 grid(1, 1);
 
-  add<<<grid, block>>>(d_a, d_b, d_out);
+  add<<<grid, block>>>(d_a, d_b, d_out, nx, ny);
 
-  CHECK(cudaMemcpy(d_out, h_out, n_bytes, cudaMemcpyDeviceToHost));
+  CHECK(cudaMemcpy(h_out, d_out, n_bytes, cudaMemcpyDeviceToHost));
 
   float *ref_out;
   ref_out = (float *)malloc(n_bytes);
   memset(ref_out, 0, n_bytes);
 
-  _add(h_a, h_b, ref_out, N);
+  add_r(h_a, h_b, ref_out, N);
 
   checkResult(ref_out, h_out, N);
 

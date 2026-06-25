@@ -13,4 +13,6 @@
 
 void checkResult(float * hostRef,float * gpuRef,const int N);
 
+int cdiv(int x, int y);
+
 #endif

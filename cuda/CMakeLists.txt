@@ -5,11 +5,13 @@ find_package(CUDAToolkit REQUIRED)
 
 set(CMAKE_CUDA_STANDARD 14)
 set(CMAKE_CUDA_STANDARD_REQUIRED ON)
-set(CMAKE_CUDA_ARCHITECTURES "52 61 75 86")
+set(CMAKE_CUDA_ARCHITECTURES "89")
+set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} --ptxas-options=-v")
 
 # Utils library
 add_library(utils STATIC
     src/utils/utils.cu
+    src/ops/add.cu
 )
 target_include_directories(utils PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_link_libraries(utils PUBLIC CUDA::cudart)
