@@ -1,0 +1,27 @@
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[project]
+name = "super_ops"
+version = "0.1.0"
+description = "Custom CUDA ops drop-in replacement for PyTorch via TorchDispatchMode"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [{name = "xiadui"}]
+
+dependencies = [
+    "torch>=2.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "numpy",
+    "tabulate",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+
+[tool.setuptools.package-dir]
+"super_ops" = "super_ops"
