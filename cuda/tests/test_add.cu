@@ -1,5 +1,5 @@
 #include "ops/add.h"
-#include "utils/utils.h"
+#include "utils.h"
 #include <cuda_runtime.h>
 #include <stdio.h>
 

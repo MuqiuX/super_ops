@@ -1,5 +1,5 @@
 #include "ops/sum.h"
-#include "utils/utils.h"
+#include "utils.h"
 
 __global__ void sum_kernel(const float *__restrict__ input,
                            float *__restrict__ partial_sums, int N) {

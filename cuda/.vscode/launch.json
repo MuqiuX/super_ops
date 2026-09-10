@@ -7,12 +7,14 @@
             "request": "launch",
             "program": "${workspaceFolder}/build/main",
             "cwd": "${workspaceFolder}",
-            "preLaunchTask": "cmake build"
+            "preLaunchTask": "cmake build",
+            "miDebuggerPath": "/usr/local/cuda-12.4/bin/cuda-gdb"
         },
         {
             "name": "CUDA C++: Attach",
             "type": "cuda-gdb",
-            "request": "attach"
+            "request": "attach",
+            "miDebuggerPath": "/usr/local/cuda-12.4/bin/cuda-gdb"
         }
     ]
 }

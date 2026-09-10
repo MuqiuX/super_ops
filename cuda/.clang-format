@@ -1,0 +1,11 @@
+# 基于 LLVM 风格，你可以改成 Google 或 Chromium
+BasedOnStyle: LLVM
+
+# 核心配置：将大括号附加到上一行（即不换行）
+BreakBeforeBraces: Attach
+
+# 其他常用的美化配置（可选）
+IndentWidth: 4
+TabWidth: 4
+UseTab: Never
+ColumnLimit: 120

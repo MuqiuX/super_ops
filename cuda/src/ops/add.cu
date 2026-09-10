@@ -1,5 +1,5 @@
 #include "ops/add.h"
-#include "utils/utils.h"
+#include "utils.h"
 #include <stdio.h>
 
 __global__ void add_kernel(const float *__restrict__ a,
