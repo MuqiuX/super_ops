@@ -6,7 +6,7 @@
 #include <stdio.h>
 
 /**
- * cpu归约
+ * baseline cpu归约
  */
 float sum_cpu(float *data, const int size) {
     if (size == 1) {
@@ -23,6 +23,9 @@ float sum_cpu(float *data, const int size) {
 }
 
 
+/**
+ * warmup
+ */
 __global__ void warmup(float *input, float *out, unsigned int n) {
 
     int tid = threadIdx.x;
@@ -49,7 +52,7 @@ __global__ void warmup(float *input, float *out, unsigned int n) {
 
 
 /**
- * 存在严重的线程分化, 线程id对应内存地址
+ * naive 存在严重的线程分化, 线程id对应内存地址
  */
 __global__ void sum_kernel(float *input, float *out, unsigned int n) {
 
@@ -77,7 +80,7 @@ __global__ void sum_kernel(float *input, float *out, unsigned int n) {
 
 
 /**
- * 优化后的
+ * 相邻配对归约
  */
 __global__ void sum_kernel_better(float *input, float *out, unsigned int n) {
     int tid = threadIdx.x;
@@ -102,6 +105,35 @@ __global__ void sum_kernel_better(float *input, float *out, unsigned int n) {
         out[blockIdx.x] = input[0];
     }
 }
+
+
+/**
+ * 交错配对归约
+ */
+__global__ void sum_kernel_better_plus(float *input, float *out, unsigned int n) {
+    int tid = threadIdx.x;
+    int idx = blockDim.x * blockIdx.x + threadIdx.x;
+
+    if (idx >= n) {
+        return;
+    }
+
+    input += blockDim.x * blockIdx.x;
+
+    for (int stride = blockDim.x / 2; stride > 0; stride >>= 1) {
+        if (tid < stride) {
+            input[tid] += input[tid + stride];
+        }
+
+        __syncthreads();
+    }
+
+    if (tid == 0) {
+        out[blockIdx.x] = input[0];
+    }
+}
+
+
 
 int main(int argc, char **argv) {
     // 设备信息
@@ -160,6 +192,14 @@ int main(int argc, char **argv) {
     CHECK(cudaDeviceSynchronize());
     CHECK(cudaMemcpy(out_host, out_dev, out_bytes, cudaMemcpyDeviceToHost));
     printf("GPU BETTER OUT: %f <<<grid: %d, block: %d>>>\n", sum_cpu(out_host, out_size), grid.x, block.x);
+
+    // sum_kernel_better
+    CHECK(cudaMemcpy(input_dev, input_host, n_bytes, cudaMemcpyHostToDevice));
+    sum_kernel_better_plus<<<grid, block>>>(input_dev, out_dev, size);
+    CHECK(cudaDeviceSynchronize());
+    CHECK(cudaMemcpy(out_host, out_dev, out_bytes, cudaMemcpyDeviceToHost));
+    printf("GPU BETTER PLUS OUT: %f <<<grid: %d, block: %d>>>\n", sum_cpu(out_host, out_size), grid.x, block.x);
+
 
     // sum_cpu
     printf("CPU OUT: %f\n", sum_cpu(input_host, size));
