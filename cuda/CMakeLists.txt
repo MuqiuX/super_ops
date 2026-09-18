@@ -30,16 +30,17 @@ target_link_libraries(prop PRIVATE utils CUDA::cudart)
 # add_executable(main src/main.cu)
 # target_link_libraries(main PRIVATE utils CUDA::cudart)
 
+#add_executable(parallelism_performance tests/parallelism_performance.cu)
+#target_link_libraries(parallelism_performance PRIVATE utils CUDA::cudart)
 
-# Test executables
-# add_executable(test_add tests/test_add.cu)
-# target_link_libraries(test_add PRIVATE utils CUDA::cudart)
+# -------------------------------
+# course
+# -------------------------------
 
-# add_executable(test_sum tests/test_sum.cu)
-# target_link_libraries(test_sum PRIVATE utils CUDA::cudart)
-
+# course001
 add_executable(course001 tests/course001.cu)
 target_link_libraries(course001 PRIVATE utils CUDA::cudart)
 
-#add_executable(parallelism_performance tests/parallelism_performance.cu)
-#target_link_libraries(parallelism_performance PRIVATE utils CUDA::cudart)
+# course002
+add_executable(course002 tests/course002.cu)
+target_link_libraries(course002 PRIVATE utils CUDA::cudart)

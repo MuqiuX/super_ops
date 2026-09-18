@@ -7,3 +7,19 @@ nsys profile --stats=true build/course001
 ```
 
 ![图片](../images/course001-1.png)
+
+
+# 002-线程束分化测试（course002.cu）
+1. 尝试不同的展开  
+sum_kernel cource001 中的交错归约  
+sum_kernel_extended_2 每block计算2个block数据  
+sum_kernel_extended_4 每block计算4个block数据  
+sum_kernel_extended_8 每block计算8个block数据  
+之前是将数据分为多个block_size大小的块，每一块都进行归约的整个计算，这其中包含同步，循环等等。  
+但是如果一个block计算n块数据，用m条加法指令就能代替m个块的整个归约过程  
+![图片](../images/course002-1.png)
+
+
+```bash
+nsys profile --stats=true build/course002
+```
